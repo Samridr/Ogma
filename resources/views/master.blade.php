@@ -1,17 +1,4 @@
-<!--
-=========================================================
-* Argon Dashboard 2 - v2.0.2
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/argon-dashboard
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,15 +30,16 @@
   <!-- Sidebar -->
   <main class="main-content position-relative border-radius-lg ">
     <!-- Navbar -->
-    
+
     @include('partials.header')
     <!-- End Navbar -->
-    
+
     <!-- main -->
-     
+
     @yield('content')
 
     <!-- main -->
+    @include('partials.footer')
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">

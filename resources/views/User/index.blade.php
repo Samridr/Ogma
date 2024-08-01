@@ -376,10 +376,7 @@
           </div>
         </div>
       </div>
-      <!-- footer -->
-            @include('partials.footer')
-
-        <!-- footer -->
+      
 
     </div>
 @endsection

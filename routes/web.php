@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('layouts.index');
 });
+Route::get('/document',[DocumentController::class,'index'])->name('document.index');
