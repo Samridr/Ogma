@@ -15,9 +15,20 @@
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
-  
-            
+
+
           </ul>
+          <li class="">
+            <a class=""href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                          <div class="icon-w">
+                              <i class="icon-feather-power"></i>
+                            </div>
+             {{ __('Deconnexion') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </li>
         </div>
       </div>
     </nav>

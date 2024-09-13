@@ -144,7 +144,7 @@
                   <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
                     <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
                       <i class="ni ni-trophy text-dark opacity-10"></i>
-                    </div> 
+                    </div>
                     {{-- <h5 class="text-white mb-1">Share with us your design tips!</h5>
                     <p>Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p> --}}
                   </div>
@@ -377,3 +377,5 @@
 
     </div>
 @endsection
+
+

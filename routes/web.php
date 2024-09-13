@@ -4,7 +4,14 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DossierController;
+// use App\Http\Controllers\ProfileController;
+// use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\UserController;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,21 +24,42 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('Layouts.index');
+    return view('auth.login');
 });
-Route::get('/document',[MenuController::class,'indexDocs'])->name('document.index');
-Route::get('/client',[MenuController::class,'indexClient'])->name('client.index');
-Route::get('/Gestion des documents',[MenuController::class,'indexGesDocs'])->name('GesDesDocs.index');
-Route::get('/Gestion des dossiers',[MenuController::class,'indexGesDoss'])->name('GesDesDossiers.index');
-Route::get('/Gestion des utilisateurs',[MenuController::class,'indexGesUsers'])->name('GesDesUsers.index');
-Route::get('/message',[MenuController::class,'indexMessage'])->name('message.index');
-Route::get('/notification',[MenuController::class,'indexNotif'])->name('notification.index');
-Route::get('/profil',[MenuController::class,'indexProfil'])->name('profil.index');
-Route::get('/support',[MenuController::class,'indexSupp'])->name('support.index');
+
+
+Route::get('/inscrire', function () {
+    return view('auth.register');
+});
+
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/document', [MenuController::class, 'indexDocs'])->name('document.index');
+    Route::get('/client', [MenuController::class, 'indexClient'])->name('client.index');
+    Route::get('/Gestion des documents', [MenuController::class, 'indexGesDocs'])->name('GesDesDocs.index');
+    Route::get('/Gestion des dossiers', [MenuController::class, 'indexGesDoss'])->name('GesDesDossiers.index');
+    Route::get('/Gestion des utilisateurs', [MenuController::class, 'indexGesUsers'])->name('GesDesUsers.index');
+    Route::get('/message', [MenuController::class, 'indexMessage'])->name('message.index');
+    Route::get('/notification', [MenuController::class, 'indexNotif'])->name('notification.index');
+    Route::get('/profil', [MenuController::class, 'indexProfil'])->name('profil.index');
+    Route::get('/support', [MenuController::class, 'indexSupp'])->name('support.index');
+});
+
+// Route::middleware(['auth','role:client'])->group(function () {
+//     Route::get('/document', [MenuController::class, 'indexDocs'])->name('document.index');
+//     Route::get('/Gestion des documents', [MenuController::class, 'indexGesDocs'])->name('GesDesDocs.index');
+//     Route::get('/message', [MenuController::class, 'indexMessage'])->name('message.index');
+//     Route::get('/notification', [MenuController::class, 'indexNotif'])->name('notification.index');
+//     Route::get('/profil', [MenuController::class, 'indexProfil'])->name('profil.index');
+//     Route::get('/support', [MenuController::class, 'indexSupp'])->name('support.index');
+// });
+
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('Layouts.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -39,5 +67,62 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+// Routes pour les utilisateurs (clients)
+Route::group(['middleware' => ['role:client']], function () {
+    Route::get('/profile', [UserController::class, 'userProfile'])->name('user.profile');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
+    Route::post('/documents/upload', [UserController::class, 'uploadDocument'])->name('documents.upload');
+    Route::get('/documents', [UserController::class, 'viewDocuments'])->name('documents.view');
+    Route::get('/dossiers', [UserController::class, 'viewDossiers'])->name('dossiers.view');
+    Route::post('/support-tickets', [UserController::class, 'createSupportTicket'])->name('support-tickets.create');
+    Route::get('/support-tickets', [UserController::class, 'viewSupportTickets'])->name('support-tickets.view');
+});
+
+// Routes pour les partenaires
+// Route::group(['middleware' => ['auth', 'role:partenaire']], function () {
+//     Route::get('/partner/dashboard', [UserController::class, 'viewPartnerDashboard'])->name('partner.dashboard');
+//     Route::get('/partner/dossiers', [PartnerController::class, 'viewClientDossiers'])->name('partner.dossiers.view');
+//     Route::post('/partner/message', [PartnerController::class, 'sendPartnerMessage'])->name('partner.message.send');
+// });
+
+// Routes pour les administrateurs
+Route::group(['middleware' => ['role:client']], function () {
+    Route::get('/admin/users', [AdminController::class, 'manageUsers'])->name('admin.users.manage');
+    Route::post('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+    Route::get('/admin/documents', [AdminController::class, 'manageDocuments'])->name('admin.documents.manage');
+    Route::post('/admin/documents/{id}/approve', [AdminController::class, 'approveDocument'])->name('admin.documents.approve');
+    Route::post('/admin/documents/{id}/reject', [AdminController::class, 'rejectDocument'])->name('admin.documents.reject');
+    Route::get('/admin/dossiers', [AdminController::class, 'manageDossiers'])->name('admin.dossiers.manage');
+    Route::post('/admin/dossiers/{id}/status', [AdminController::class, 'updateDossierStatus'])->name('admin.dossiers.update.status');
+    Route::post('/admin/notifications', [AdminController::class, 'sendNotification'])->name('admin.notifications.send');
+    Route::get('/admin/statistics', [AdminController::class, 'viewStatistics'])->name('admin.statistics.view');
+});
+
+// Routes CRUD pour les dossiers
+Route::get('/dossiers', [DossierController::class, 'index'])->name('dossiers.index');
+Route::get('/dossiers/create', [DossierController::class, 'create'])->name('dossiers.create');
+Route::post('/dossiers', [DossierController::class, 'store'])->name('dossiers.store');
+Route::get('/dossiers/{id}', [DossierController::class, 'show'])->name('dossiers.show');
+Route::get('/dossiers/{id}/edit', [DossierController::class, 'edit'])->name('dossiers.edit');
+Route::put('/dossiers/{id}', [DossierController::class, 'update'])->name('dossiers.update');
+Route::delete('/dossiers/{id}', [DossierController::class, 'destroy'])->name('dossiers.destroy');
+
+// Routes CRUD pour les documents
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.create');
+Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
+Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
+Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
+Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
+// Routes CRUD pour les tickets de support
+Route::get('/support-tickets', [SupportTicketController::class, 'index'])->name('support-tickets.index');
+Route::get('/support-tickets/create', [SupportTicketController::class, 'create'])->name('support-tickets.create');
+Route::post('/support-tickets', [SupportTicketController::class, 'store'])->name('support-tickets.store');
+Route::get('/support-tickets/{id}', [SupportTicketController::class, 'show'])->name('support-tickets.show');
+Route::get('/support-tickets/{id}/edit', [SupportTicketController::class, 'edit'])->name('support-tickets.edit');
+Route::put('/support-tickets/{id}', [SupportTicketController::class, 'update'])->name('support-tickets.update');
+Route::delete('/support-tickets/{id}', [SupportTicketController::class, 'destroy'])->name('support-tickets.destroy');
 
 require __DIR__.'/auth.php';
