@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// Routes pour les utilisateurs (clients)
+// Routes pour les utilisateurs (clients) 
 Route::group(['middleware' => ['role:client']], function () {
     Route::get('/profile', [UserController::class, 'userProfile'])->name('user.profile');
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');

@@ -1,0 +1,9 @@
+[33m27a3a33[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mconnexion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/connexion[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33m8f182a6[m[33m ([m[1;31morigin/hector[m[33m)[m HEAD@{1}: pull origin hector: Fast-forward
+[33m27a3a33[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mconnexion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/connexion[m[33m)[m HEAD@{2}: checkout: moving from main to connexion
+[33m3a5fd8a[m[33m ([m[1;32mmain[m[33m)[m HEAD@{3}: commit (merge): inscription
+[33m4e235a3[m HEAD@{4}: commit (merge): interface2
+[33m4f96880[m HEAD@{5}: commit (merge): interface
+[33m01f3605[m HEAD@{6}: commit: connexion
+[33m27a3a33[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mconnexion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/connexion[m[33m)[m HEAD@{7}: Branch: renamed refs/heads/master to refs/heads/main
+[33m27a3a33[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mconnexion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/connexion[m[33m)[m HEAD@{9}: commit (initial): Premier commit
